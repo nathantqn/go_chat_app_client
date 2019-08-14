@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import TextArea from "antd/lib/input/TextArea";
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { SUBMIT_MESSAGE } from "../graphql/mutation";
-import { GET_CURRENT_USER } from "../graphql/query";
 
 interface Props {
   roomId: number;
+  userId: number;
 }
 
-const ChatBox = ({ roomId }: Props) => {
+const ChatBox = ({ roomId, userId }: Props) => {
   const [message, setMessage] = useState();
-  const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: "cache-only" });
   const [submitMessage] = useMutation(SUBMIT_MESSAGE, {
     variables: {
       input: {
         text: message,
-        userId: data.currentUser.id,
+        userId,
         roomId
       }
     }
@@ -26,6 +25,7 @@ const ChatBox = ({ roomId }: Props) => {
 
   const handleKeyDown = e => {
     if (e.key === "Enter") {
+      e.preventDefault();
       submitMessage();
       setMessage("");
     }

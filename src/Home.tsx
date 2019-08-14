@@ -15,7 +15,7 @@ interface Room {
 const { TabPane } = Tabs;
 const Home = () => {
   const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: "cache-only" });
-  const { rooms } = data.currentUser;
+  const { rooms, id: userId } = data.currentUser;
 
   return (
     <div>
@@ -53,7 +53,7 @@ const Home = () => {
                   </List.Item>
                 )}
               />
-              <ChatBox roomId={id} />
+              <ChatBox roomId={id} userId={userId} />
             </TabPane>
           );
         })}
