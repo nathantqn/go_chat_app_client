@@ -48,6 +48,7 @@ const ChatRoom = ({ room, userId }: Prop) => {
           user {
             id
             name
+            avatarURL
           }
         }
       }
@@ -90,9 +91,7 @@ const ChatRoom = ({ room, userId }: Prop) => {
           renderItem={message => (
             <List.Item>
               <List.Item.Meta
-                avatar={
-                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                }
+                avatar={<Avatar src={message.user.avatarURL} />}
                 title={<a href="https://ant.design">{message.user.name}</a>}
                 description={message.text}
               />

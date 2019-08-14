@@ -24,6 +24,7 @@ export const GET_CURRENT_USER = gql`
           user {
             id
             name
+            avatarURL
           }
         }
       }

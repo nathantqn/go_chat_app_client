@@ -9,6 +9,7 @@ export const ON_MESSAGE_CREATED = gql`
       user {
         id
         name
+        avatarURL
       }
     }
   }

@@ -15,6 +15,7 @@ export const LOGIN = gql`
           user {
             id
             name
+            avatarURL
           }
         }
       }
@@ -43,6 +44,7 @@ export const CREATE_CHANNEL = gql`
         user {
           id
           name
+          avatarURL
         }
       }
     }
@@ -61,6 +63,7 @@ export const JOIN_CHANNEL = gql`
         user {
           id
           name
+          avatarURL
         }
       }
     }
