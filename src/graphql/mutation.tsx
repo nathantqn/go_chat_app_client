@@ -30,3 +30,12 @@ export const SUBMIT_MESSAGE = gql`
     }
   }
 `;
+
+export const CREATE_CHANNEL = gql`
+  mutation createChannel($input: NewRoom!) {
+    createRoom(input: $input) {
+      id
+      name
+    }
+  }
+`;
