@@ -1,19 +1,16 @@
-.login-form-container {
+.channel-list {
   height: 100vh;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
-  display: flex;
-  flex-direction: column;
 }
 
-.login-btn {
-  height: 50px;
-  margin-top: 15px;
-  width: 25%;
+.rooms-list {
+  height: 100vh;
 }
 
-.login-input {
-  height: 50px;
-  width: 25%;
+.messages-group {
+  height: 100vh;
+}
+
+.messages-list {
+  height: 82vh !important;
+  overflow: auto !important;
 }

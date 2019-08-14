@@ -1,6 +1,6 @@
 import React from "react";
 import { Input, Button } from "antd";
-import "./Home.css";
+import "./Login.css";
 
 const Login = () => {
   return (

@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.css";
-import Login from "./Login";
+import Home from "./Home";
 
 const App: React.FC = () => {
-  return <Login />;
+  return <Home />;
 };
 
 export default App;
