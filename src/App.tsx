@@ -7,7 +7,7 @@ import Home from "./Home";
 
 const App: React.FC = () => {
   const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: "cache-only" });
-  if (data.currentUser) return <Home />;
+  if (data.currentUser) return <Home currentUser={data.currentUser} />;
   return <Login />;
 };
 

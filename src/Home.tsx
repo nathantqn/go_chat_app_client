@@ -1,21 +1,30 @@
 import React from "react";
 import { Tabs, Icon } from "antd";
 import "./Home.css";
-import { GET_CURRENT_USER } from "./graphql/query";
+import { GET_ROOMS } from "./graphql/query";
 import { useQuery } from "@apollo/react-hooks";
 import ChatRoom from "./home/ChatRoom";
 import CreateChannel from "./home/CreateChannel";
+import LoadingContainer from "./components/LoadingContainer";
+import NotJoinedRoom from "./home/NotJoinedRoom";
 
 const { TabPane } = Tabs;
+interface Props {
+  currentUser: any;
+}
 
-const Home = () => {
-  const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: "cache-only" });
-  const { rooms, id: userId } = data.currentUser;
+const Home = ({ currentUser }: Props) => {
+  const { loading, data: dataRooms } = useQuery(GET_ROOMS);
+  if (loading) return <LoadingContainer />;
+  const { rooms, id: userId } = currentUser;
+  const notJoinedRooms = dataRooms.rooms.filter(
+    room => !rooms.find(roomJoined => roomJoined.id === room.id)
+  );
 
   return (
     <div>
       <Tabs
-        defaultActiveKey={rooms[0].id}
+        defaultActiveKey={`channel-${rooms[0].id}`}
         tabPosition="left"
         className="rooms-list"
       >
@@ -35,11 +44,28 @@ const Home = () => {
           const { name, id } = room;
           return (
             <TabPane
-              tab={`# ${name}`}
+              tab={
+                <span>
+                  <Icon type="home" />
+                  {name}
+                </span>
+              }
               key={`channel-${id}`}
               className="messages-group"
             >
               <ChatRoom room={room} userId={userId} key={room.id} />
+            </TabPane>
+          );
+        })}
+        {notJoinedRooms.map(room => {
+          const { name, id } = room;
+          return (
+            <TabPane
+              tab={`# ${name}`}
+              key={`channel-${id}`}
+              className="messages-group"
+            >
+              <NotJoinedRoom roomID={id} userID={currentUser.id} />
             </TabPane>
           );
         })}

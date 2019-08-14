@@ -39,3 +39,21 @@ export const CREATE_CHANNEL = gql`
     }
   }
 `;
+
+export const JOIN_CHANNEL = gql`
+  mutation joinChannel($input: NewParticipation!) {
+    joinRoom(input: $input) {
+      id
+      name
+      messages {
+        id
+        text
+        postedAt: createdAt
+        user {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
