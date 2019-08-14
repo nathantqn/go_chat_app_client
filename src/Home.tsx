@@ -1,10 +1,10 @@
 import React from "react";
 import { Tabs, List, Avatar } from "antd";
 import "./Home.css";
-import TextArea from "antd/lib/input/TextArea";
 import { GET_CURRENT_USER } from "./graphql/query";
 import { useQuery } from "@apollo/react-hooks";
 import moment from "moment";
+import ChatBox from "./home/ChatBox";
 
 interface Room {
   id: number;
@@ -53,17 +53,7 @@ const Home = () => {
                   </List.Item>
                 )}
               />
-
-              <TextArea
-                rows={2}
-                style={{
-                  width: "100%",
-                  padding: 10,
-                  height: "15vh",
-                  marginRight: 15,
-                  marginTop: 10
-                }}
-              />
+              <ChatBox roomId={id} />
             </TabPane>
           );
         })}

@@ -21,3 +21,12 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const SUBMIT_MESSAGE = gql`
+  mutation submitMessage($input: NewMessage!) {
+    createMessage(input: $input) {
+      id
+      text
+    }
+  }
+`;
