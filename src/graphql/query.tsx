@@ -20,6 +20,7 @@ export const GET_CURRENT_USER = gql`
         messages {
           id
           text
+          postedAt: createdAt
           user {
             id
             name

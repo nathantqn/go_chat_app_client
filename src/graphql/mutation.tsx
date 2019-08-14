@@ -11,6 +11,7 @@ export const LOGIN = gql`
         messages {
           id
           text
+          postedAt: createdAt
           user {
             id
             name

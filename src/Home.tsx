@@ -4,6 +4,7 @@ import "./Home.css";
 import TextArea from "antd/lib/input/TextArea";
 import { GET_CURRENT_USER } from "./graphql/query";
 import { useQuery } from "@apollo/react-hooks";
+import moment from "moment";
 
 interface Room {
   id: number;
@@ -46,6 +47,9 @@ const Home = () => {
                       }
                       description={message.text}
                     />
+                    <div style={{ marginRight: 20 }}>
+                      {moment(message.postedAt).format("HH:MM - YYYY/MM/DD")}
+                    </div>
                   </List.Item>
                 )}
               />
