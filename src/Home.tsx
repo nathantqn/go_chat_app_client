@@ -52,6 +52,7 @@ const Home = ({ currentUser }: Props) => {
               }
               key={`channel-${id}`}
               className="messages-group"
+              forceRender
             >
               <ChatRoom room={room} userId={userId} key={room.id} />
             </TabPane>

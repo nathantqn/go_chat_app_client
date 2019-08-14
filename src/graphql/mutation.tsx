@@ -36,6 +36,15 @@ export const CREATE_CHANNEL = gql`
     createRoom(input: $input) {
       id
       name
+      messages {
+        id
+        text
+        postedAt: createdAt
+        user {
+          id
+          name
+        }
+      }
     }
   }
 `;
