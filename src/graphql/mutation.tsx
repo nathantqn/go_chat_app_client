@@ -8,6 +8,14 @@ export const LOGIN = gql`
       rooms {
         id
         name
+        messages {
+          id
+          text
+          user {
+            id
+            name
+          }
+        }
       }
     }
   }

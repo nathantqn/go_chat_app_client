@@ -12,11 +12,19 @@ export const GET_ROOMS = gql`
 export const GET_CURRENT_USER = gql`
   query currentUser {
     currentUser @client {
-      name
       id
+      name
       rooms {
-        name
         id
+        name
+        messages {
+          id
+          text
+          user {
+            id
+            name
+          }
+        }
       }
     }
   }
