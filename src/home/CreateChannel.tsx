@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { Input, Button } from "antd";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
 import { CREATE_CHANNEL } from "../graphql/mutation";
+import { GET_CURRENT_USER } from "../graphql/query";
 
 const CreateChannel = () => {
   const [name, setName] = useState();
   const handeChangeName = e => {
     setName(e.target.value);
   };
+  const { data } = useQuery(GET_CURRENT_USER, { fetchPolicy: "cache-only" });
   const [createChannel, { loading: createChannelLoading }] = useMutation(
     CREATE_CHANNEL,
     {
       variables: {
         input: {
-          name
+          name,
+          userID: data.currentUser.id
         }
       },
       onCompleted: () => {
