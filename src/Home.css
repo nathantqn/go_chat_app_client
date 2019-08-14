@@ -11,6 +11,5 @@
 }
 
 .messages-list {
-  height: 82vh !important;
-  overflow: auto !important;
+  height: 100%;
 }

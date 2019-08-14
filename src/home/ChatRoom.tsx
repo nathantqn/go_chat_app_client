@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSubscription } from "@apollo/react-hooks";
 import { ON_MESSAGE_CREATED } from "../graphql/subscription";
 import { List, Avatar } from "antd";
 import ChatBox from "./ChatBox";
 import moment from "moment";
 import { OnSubscriptionDataOptions } from "@apollo/react-common";
+import { animateScroll as scroll } from "react-scroll";
+import "./ChatRoom.css";
+
+import { Element } from "react-scroll";
 import gql from "graphql-tag";
 
 interface Room {
@@ -20,6 +24,13 @@ interface Prop {
 
 const ChatRoom = ({ room, userId }: Prop) => {
   const { id, messages } = room as Room;
+  const scrollSectionId = `chat-list-room${id}`;
+  useEffect(() => {
+    scroll.scrollToBottom({
+      containerId: scrollSectionId,
+      duration: 400
+    });
+  }, [scrollSectionId]);
 
   const handleNewMessageReceived = ({
     subscriptionData,
@@ -54,6 +65,11 @@ const ChatRoom = ({ room, userId }: Prop) => {
         messages: [...updatedRoom.messages, messageCreated]
       }
     });
+
+    scroll.scrollToBottom({
+      containerId: scrollSectionId,
+      duration: 200
+    });
   };
 
   useSubscription(ON_MESSAGE_CREATED, {
@@ -66,25 +82,27 @@ const ChatRoom = ({ room, userId }: Prop) => {
 
   return (
     <>
-      <List
-        className="messages-list"
-        itemLayout="horizontal"
-        dataSource={messages}
-        renderItem={message => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={
-                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-              }
-              title={<a href="https://ant.design">{message.user.name}</a>}
-              description={message.text}
-            />
-            <div style={{ marginRight: 20 }}>
-              {moment(message.postedAt).format("HH:MM - YYYY/MM/DD")}
-            </div>
-          </List.Item>
-        )}
-      />
+      <Element className="scroll-container" id={scrollSectionId}>
+        <List
+          className="messages-list"
+          itemLayout="horizontal"
+          dataSource={messages}
+          renderItem={message => (
+            <List.Item>
+              <List.Item.Meta
+                avatar={
+                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                }
+                title={<a href="https://ant.design">{message.user.name}</a>}
+                description={message.text}
+              />
+              <div style={{ marginRight: 20 }}>
+                {moment(message.postedAt).format("HH:MM - YYYY/MM/DD")}
+              </div>
+            </List.Item>
+          )}
+        />
+      </Element>
       <ChatBox roomId={id} userId={userId} />
     </>
   );

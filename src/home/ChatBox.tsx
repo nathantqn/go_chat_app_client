@@ -17,7 +17,8 @@ const ChatBox = ({ roomId, userId }: Props) => {
         userId,
         roomId
       }
-    }
+    },
+    onCompleted: () => {}
   });
   const handeChangeMessage = e => {
     setMessage(e.target.value);
