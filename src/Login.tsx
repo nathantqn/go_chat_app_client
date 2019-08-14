@@ -27,6 +27,14 @@ const Login = () => {
       });
     }
   });
+
+  const handleKeyDown = e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      login();
+    }
+  };
+
   return (
     <div className="login-form-container">
       <Input
@@ -35,6 +43,7 @@ const Login = () => {
         className="login-input"
         onChange={handeChangeName}
         value={name}
+        onKeyDown={handleKeyDown}
       />
       <Button
         type="primary"
