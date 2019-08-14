@@ -21,10 +21,18 @@ const Home = ({ currentUser }: Props) => {
     room => !rooms.find(roomJoined => roomJoined.id === room.id)
   );
 
+  const isJoinedRoomsEmpty = rooms.length === 0;
+  const isRoomsEmpty = dataRooms.rooms.length === 0;
+  const createChannelKey = "create-channel";
+
   return (
     <div>
       <Tabs
-        defaultActiveKey={`channel-${rooms[0].id}`}
+        defaultActiveKey={
+          isRoomsEmpty || isJoinedRoomsEmpty
+            ? createChannelKey
+            : `channel-${rooms[0].id}`
+        }
         tabPosition="left"
         className="rooms-list"
       >
@@ -35,7 +43,7 @@ const Home = ({ currentUser }: Props) => {
               Create Channel
             </span>
           }
-          key={"create-channel"}
+          key={createChannelKey}
           className="messages-group"
         >
           <CreateChannel />
