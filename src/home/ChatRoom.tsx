@@ -4,6 +4,8 @@ import { ON_MESSAGE_CREATED } from "../graphql/subscription";
 import { List, Avatar } from "antd";
 import ChatBox from "./ChatBox";
 import moment from "moment";
+import { OnSubscriptionDataOptions } from "@apollo/react-common";
+import gql from "graphql-tag";
 
 interface Room {
   id: number;
@@ -18,27 +20,56 @@ interface Prop {
 
 const ChatRoom = ({ room, userId }: Prop) => {
   const { id, messages } = room as Room;
-  const { data: dataSubscribe, loading: loadingSub } = useSubscription(
-    ON_MESSAGE_CREATED,
-    {
-      variables: {
-        roomID: id,
-        userID: userId
-      }
-    }
-  );
 
-  let messagesRender = messages;
-  if (!loadingSub) {
-    messagesRender = [...messagesRender, dataSubscribe.messageCreated];
-  }
+  const handleNewMessageReceived = ({
+    subscriptionData,
+    client
+  }: OnSubscriptionDataOptions<any>) => {
+    const { messageCreated } = subscriptionData.data;
+    const roomCacheID = `Room:${id}`;
+    const roomFragment = gql`
+      fragment updatedRoom on Room {
+        id
+        messages {
+          id
+          text
+          postedAt: createdAt
+          user {
+            id
+            name
+          }
+        }
+      }
+    `;
+    const updatedRoom = client.readFragment({
+      id: roomCacheID,
+      fragment: roomFragment
+    });
+
+    client.writeFragment({
+      id: roomCacheID,
+      fragment: roomFragment,
+      data: {
+        ...updatedRoom,
+        messages: [...updatedRoom.messages, messageCreated]
+      }
+    });
+  };
+
+  useSubscription(ON_MESSAGE_CREATED, {
+    variables: {
+      roomID: id,
+      userID: userId
+    },
+    onSubscriptionData: handleNewMessageReceived
+  });
 
   return (
     <>
       <List
         className="messages-list"
         itemLayout="horizontal"
-        dataSource={messagesRender}
+        dataSource={messages}
         renderItem={message => (
           <List.Item>
             <List.Item.Meta
