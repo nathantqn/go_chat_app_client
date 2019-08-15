@@ -8,11 +8,11 @@ import React from "react";
 import App from "./App";
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:8080/query"
+  uri: process.env.REACT_APP_HOST
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:8080/query`,
+  uri: process.env.REACT_APP_WS_HOST ||`ws://localhost:8080/query`,
   options: {
     reconnect: true
   }
