@@ -33,3 +33,7 @@
   height: 50px;
   width: 25%;
 }
+
+.ant-tabs .ant-tabs-left-bar .ant-tabs-tab {
+  text-align: left;
+}
