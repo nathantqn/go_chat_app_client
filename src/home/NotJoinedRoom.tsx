@@ -41,7 +41,7 @@ const NotJoinedRoom = ({ roomID, userID }: Props) => {
         justifyContent: "center"
       }}
     >
-      <Button type="primary" onClick={joinChannel as any} loading={loading}>
+      <Button type="primary" onClick={joinChannel as any} loading={loading} size="large">
         Join This Channel
       </Button>
     </div>
