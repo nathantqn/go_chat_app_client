@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Input, Button } from "antd";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { CREATE_CHANNEL } from "../graphql/mutation";
-import { GET_CURRENT_USER, GET_ROOMS } from "../graphql/query";
+import { GET_CURRENT_USER } from "../graphql/query";
 
 const CreateChannel = () => {
   const [name, setName] = useState();
@@ -31,16 +31,6 @@ const CreateChannel = () => {
               ...currentUser,
               rooms: [...currentUser.rooms, createRoom]
             }
-          }
-        });
-        const roomsData: any = cache.readQuery({
-          query: GET_ROOMS
-        });
-        const { rooms } = roomsData;
-        cache.writeQuery({
-          query: GET_ROOMS,
-          data: {
-            rooms: [...rooms, createRoom]
           }
         });
       }

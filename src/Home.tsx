@@ -2,11 +2,13 @@ import React from "react";
 import { Tabs, Icon } from "antd";
 import "./Home.css";
 import { GET_ROOMS } from "./graphql/query";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useSubscription } from "@apollo/react-hooks";
 import ChatRoom from "./home/ChatRoom";
 import CreateChannel from "./home/CreateChannel";
 import LoadingContainer from "./components/LoadingContainer";
 import NotJoinedRoom from "./home/NotJoinedRoom";
+import { ON_ROOM_ADDED } from "./graphql/subscription";
+import { OnSubscriptionDataOptions } from "@apollo/react-common";
 
 const { TabPane } = Tabs;
 interface Props {
@@ -14,6 +16,27 @@ interface Props {
 }
 
 const Home = ({ currentUser }: Props) => {
+  const handleNewRoomAdded = ({
+    subscriptionData,
+    client
+  }: OnSubscriptionDataOptions<any>) => {
+    const { roomAdded } = subscriptionData.data;
+    const roomsData: any = client.readQuery({
+      query: GET_ROOMS
+    });
+    const { rooms } = roomsData;
+    client.writeQuery({
+      query: GET_ROOMS,
+      data: {
+        rooms: [...rooms, roomAdded]
+      }
+    });
+  }
+
+  useSubscription(ON_ROOM_ADDED, {variables: {
+    userID: currentUser.id
+  }, onSubscriptionData: handleNewRoomAdded})
+
   const { loading, data: dataRooms } = useQuery(GET_ROOMS);
   if (loading) return <LoadingContainer />;
   const { rooms, id: userId } = currentUser;
