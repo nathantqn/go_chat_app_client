@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tabs, Icon } from "antd";
 import "./Home.css";
 import { GET_ROOMS } from "./graphql/query";
@@ -16,6 +16,12 @@ interface Props {
 }
 
 const Home = ({ currentUser }: Props) => {
+  const [currentTab, setCurrentTab] = useState()
+
+  const handleChangeTab = (currentTab) => {
+    setCurrentTab(currentTab)
+  }
+
   const handleNewRoomAdded = ({
     subscriptionData,
     client
@@ -33,9 +39,11 @@ const Home = ({ currentUser }: Props) => {
     });
   }
 
-  useSubscription(ON_ROOM_ADDED, {variables: {
-    userID: currentUser.id
-  }, onSubscriptionData: handleNewRoomAdded})
+  useSubscription(ON_ROOM_ADDED, {
+    variables: {
+      userID: currentUser.id
+    }, onSubscriptionData: handleNewRoomAdded
+  })
 
   const { loading, data: dataRooms } = useQuery(GET_ROOMS);
   if (loading) return <LoadingContainer />;
@@ -43,19 +51,13 @@ const Home = ({ currentUser }: Props) => {
   const notJoinedRooms = dataRooms.rooms.filter(
     room => !rooms.find(roomJoined => roomJoined.id === room.id)
   );
-
-  const isJoinedRoomsEmpty = rooms.length === 0;
-  const isRoomsEmpty = dataRooms.rooms.length === 0;
   const createChannelKey = "create-channel";
 
   return (
     <div>
       <Tabs
-        defaultActiveKey={
-          isRoomsEmpty || isJoinedRoomsEmpty
-            ? createChannelKey
-            : `channel-${rooms[0].id}`
-        }
+        activeKey={currentTab}
+        onChange={handleChangeTab}
         tabPosition="left"
         className="rooms-list"
       >
@@ -77,7 +79,7 @@ const Home = ({ currentUser }: Props) => {
             <TabPane
               tab={
                 <span>
-                  <Icon type="home" />
+                  <Icon type="home" theme="filled" />
                   {name}
                 </span>
               }

@@ -33,9 +33,18 @@ const CreateChannel = () => {
             }
           }
         });
+        setName("")
       }
     }
   );
+
+  const handleKeyDown = e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      createChannel();
+    }
+  };
+
   return (
     <div className="create-channel-form-container">
       <Input
@@ -44,6 +53,7 @@ const CreateChannel = () => {
         className="channel-name-input"
         onChange={handeChangeName}
         value={name}
+        onKeyDown={handleKeyDown}
       />
       <Button
         type="primary"
