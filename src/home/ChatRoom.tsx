@@ -36,13 +36,16 @@ const ChatRoom = ({ room, userId, currentTab, handleChangeTab }: Prop) => {
 
 
   const openNotification = (title: string, desc: string, icon: string) => {
+    const notifKey = `${room.id} + ${Date.now()}`
     notification.open({
+      key: notifKey,
       message: title,
       description:
       desc,
       icon: <img src={icon} alt={icon} style={{width: 32, height: 32}}/>,
       onClick: () => {
         handleChangeTab(`channel-${room.id}`)
+        notification.close(notifKey)
       }
     });
   };
