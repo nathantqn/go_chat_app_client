@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSubscription } from "@apollo/react-hooks";
 import { ON_MESSAGE_CREATED } from "../graphql/subscription";
-import { List, Avatar } from "antd";
+import { List, Avatar, notification, Icon } from "antd";
 import ChatBox from "./ChatBox";
 import moment from "moment";
 import { OnSubscriptionDataOptions } from "@apollo/react-common";
@@ -20,9 +20,11 @@ interface Room {
 interface Prop {
   room: Room;
   userId: number;
+  currentTab: string
+  handleChangeTab: (currentTab) => void
 }
 
-const ChatRoom = ({ room, userId }: Prop) => {
+const ChatRoom = ({ room, userId, currentTab, handleChangeTab }: Prop) => {
   const { id, messages } = room as Room;
   const scrollSectionId = `chat-list-room${id}`;
   useEffect(() => {
@@ -32,6 +34,19 @@ const ChatRoom = ({ room, userId }: Prop) => {
     });
   }, [scrollSectionId]);
 
+
+  const openNotification = (title: string, desc: string, icon: string) => {
+    notification.open({
+      message: title,
+      description:
+      desc,
+      icon: <img src={icon} alt={icon} style={{width: 32, height: 32}}/>,
+      onClick: () => {
+        handleChangeTab(`channel-${room.id}`)
+      }
+    });
+  };
+  
   const handleNewMessageReceived = ({
     subscriptionData,
     client
@@ -71,6 +86,12 @@ const ChatRoom = ({ room, userId }: Prop) => {
       containerId: scrollSectionId,
       duration: 200
     });
+
+    if (currentTab !== `channel-${room.id}` && messageCreated.user.id !== userId) {
+      const title = `${messageCreated.user.name} sent in #${room.name}` 
+      const message = messageCreated.text
+      openNotification(title, message, messageCreated.user.avatarURL)
+    }
   };
 
   useSubscription(ON_MESSAGE_CREATED, {

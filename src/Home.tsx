@@ -87,7 +87,8 @@ const Home = ({ currentUser }: Props) => {
               className="messages-group"
               forceRender
             >
-              <ChatRoom room={room} userId={userId} key={room.id} />
+              <ChatRoom room={room} userId={userId} key={room.id}
+                currentTab={currentTab} handleChangeTab={handleChangeTab} />
             </TabPane>
           );
         })}
